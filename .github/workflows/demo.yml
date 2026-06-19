@@ -1,4 +1,4 @@
-name: Docker Application Test
+name: Deploy to EC2
 
 on:
   push:
@@ -6,24 +6,23 @@ on:
       - master
 
 jobs:
-  docker-test:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Source Code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build Docker Image
-        run: docker build -t myapp .
+      - name: Deploy to EC2 via SSH  
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.SERVER_IP }}
+          username: ubuntu
+          
 
-      - name: Run Docker Container
-        run: docker run -d --name mycontainer -p 8080:80 myapp
+            docker pull mydockerid/myapp:latest
 
-      - name: Wait for Application Startup
-        run: sleep 10
+            docker stop myapp || true
+            docker rm myapp || true
 
-      - name: Verify Application
-        run: curl -f http://localhost:8080
-
-      - name: Display Running Containers
-        run: docker ps
+            docker run -d -p 8080:8080 --name myapp mydockerid/myapp:latest
