@@ -20,9 +20,4 @@ jobs:
           username: ubuntu
           
 
-            docker pull mydockerid/myapp:latest
-
-            docker stop myapp || true
-            docker rm myapp || true
-
-            docker run -d -p 8080:8080 --name myapp mydockerid/myapp:latest
+            
