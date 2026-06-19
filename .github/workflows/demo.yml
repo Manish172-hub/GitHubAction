@@ -1,23 +1,29 @@
-name: Deploy to EC2
+name: Deploy to Server
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Source
         uses: actions/checkout@v4
 
-      - name: Deploy to EC2 via SSH  
+      - name: Verify Variable
+        run: echo "Server IP: ${{ vars.SERVER_IP }}"
+
+      - name: Connect to Server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ vars.SERVER_IP }}
           username: ubuntu
-          
-
-            
+          key: ${{ secrets.SECRET_KEY }}
+          script: |
+            echo "Connected Successfully"
+            hostname
+            pwd
+            whoami
